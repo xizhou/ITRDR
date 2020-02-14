@@ -5,7 +5,7 @@ ITRDR是Ｒ平台下的基于不同来源的转录组大数据的整合工具，
 
 ## Authors
 
-[刘文粟] (Liu wensu)
+[刘文粟] (Liu Wensu)
 
 [周晓北] (Zhou Xiaobei)
 
