@@ -44,3 +44,29 @@ geneinfo <- as.data.table(org.Hs.egSYMBOL)
 go <- merge(go,geneinfo,all.x=TRUE)
 gene_go <- go[go_id%in%target_GO,unique(symbol)]
 ```
+寻找研究对象的markers
+```r
+topic <- "and prostate cancer"
+library(data.table)
+x <- fread("combine.csv")
+gene <- x[,gene]
+x[,gene:=NULL]
+y <- list()
+for(i in seq(gene))
+{
+   tmp <- getCount(gene[i])
+   if(tmp>0)
+   {
+      xi <- paste(gene[i],topic)
+      y[[i]] <- getCount(xi)
+   }
+   else
+   {
+      y[[i]] <- 0
+   } 
+   cat("iteration = ",i,"\n")
+}
+y <- unlist(y)
+res <- data.table(gene=gene,hits=y)
+fwrite(res,"hit.csv")
+```
