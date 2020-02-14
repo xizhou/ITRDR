@@ -9,7 +9,16 @@ ITRDR是Ｒ平台下的基于不同来源的转录组大数据的整合工具，
 
 [周晓北] (Zhou Xiaobei)
 
+## <a name="install"></a> Prerequisites and installation
 
+### <a name="prerequisites"></a> Prerequisites
+- **R (>=3.5.3)** 
+
+### <a name="installlation"></a> Installlation
+Temporally, use:
+```r
+source("~/ITRDR/R/ITRDR.R")
+```
 
 ## Usage
 读取GEO数据并形式上合并
