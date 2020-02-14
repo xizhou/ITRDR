@@ -30,3 +30,17 @@ f1 <- Reduce(function(...) merge.data.table(...,all=TRUE),f1)
 f1[is.na(f1)] <- 0
 fwrite(f1,"combine.csv")
 ```
+
+读入文献中有报道的标志性基因和已知通路
+```r
+marker_gene<-c("AR","CD46","STAT5A","STAT5B","NOTCH1","FOXA1",
+   "KDM6A","ASXL1","KMT2A","KMT2D","WDR5","ASH2L","EZH2",
+   "KDM1A","NR3C1","PIK3CB","AKT1","MTOR","KDM5D","C17ORF49")
+power_gene<-sqrt(c(16,8,5,5,8,6,6,6,10,10,10,10,8,8,12,8,8,8,8,8)) 
+target_GO<-c("GO:0000380","GO:0016310","GO:0030521","GO:0008083","GO:0006914")
+library("org.Hs.eg.db")
+go <- as.data.table(org.Hs.egGO)
+geneinfo <- as.data.table(org.Hs.egSYMBOL)
+go <- merge(go,geneinfo,all.x=TRUE)
+gene_go <- go[go_id%in%target_GO,unique(symbol)]
+```
