@@ -21,6 +21,19 @@ source("~/ITRDR/R/ITRDR.R")
 ```
 
 ## Usage
+### <a name="process"></a> Process data
+The input data should be formated as following: 
+    gene	pval_1
+    NECAP2	0.358843944
+    CLIC4	0.030455456
+    DBT	0.292270083
+    C1orf21	0.000382696
+    COP1	0.020345337
+    PRUNE1	0.325788738
+    LIN9	0.017277068
+The first column is gene symbol (with column name's "gene"), the second column should contain the result of selected group comparison (pvalue (named as pval\_x) or 
+fold change (fc\_x)).
+
 读取GEO数据并形式上合并
 ```r
 library(data.table)
