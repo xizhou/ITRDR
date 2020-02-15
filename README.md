@@ -33,10 +33,11 @@ The input data should be formated as following:
     PRUNE1	0.325788738
     LIN9	0.017277068
 
-The first column is gene symbol (with column name's "gene"), the second column should contain the result of selected group comparison (pvalue (named as pval\_x) or 
+The first column is gene symbol (with column name's "gene"), the other columns should contain the result of selected group comparison (pvalue (named as pval\_x) or 
 fold change (fc\_x)).
 
 读取GEO数据并形式上合并
+
 ```r
 library(data.table)
 dir <- "~/ITRDR/data/sample_data"
@@ -54,6 +55,14 @@ f1 <- Reduce(function(...) merge.data.table(...,all=TRUE),f1)
 f1[is.na(f1)] <- 0
 fwrite(f1,"combine.csv")
 ```
+The result should be like:
+
+    gene	GSE55030_p_val	GSE71797_fc_1	GSE71797_fc_2	GSE82223_fc_1	GSE86532_fc_1	GSE92574_fc_1	GSE110903_fc_1
+    ISG15	0.029289252	0.475583449	3.077468801	0	0.126152927	0	0.484946133
+    AGRN	0.020108192	9.767047772	0.460773615	0	0	0	1.677513801
+    RP11-465B22.3	0	0	0	0	0	0	0.125557896
+    RP11-465B22.8	0	0	0	0	0	0	0.395281318
+    B3GALT6	0.391504072	2.840062329	0.312959305	0	0	0.334790739	1.010640313
 
 读入文献中有报道的标志性基因和已知通路
 ```r
