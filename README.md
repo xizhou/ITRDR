@@ -103,3 +103,108 @@ y <- unlist(y)
 res <- data.table(gene=gene,hits=y)
 fwrite(res,"hit.csv")
 ```
+
+
+数据二次整合
+```r
+library(data.table)
+x <- fread("combine.csv")
+gene <- x[,gene]
+x[,gene:=NULL]
+index <- rep("pval",ncol(x))
+index[grep("fc",names(x))] <- "fc"
+x[,c(1,5)] <- - x[,c(1,5)]
+library(data.table)
+hit <- fread("hit.csv")
+hit <- merge(hit,mg,all.x=TRUE,sort=FALSE)
+hit[is.na(hit)] <- 0
+hit[,go:=0]
+hit[gene%in%gene_go,go:=1]
+```
+
+筛选基因
+```r
+niter <- 100000
+filter_p <- -seq(0.00032,0.32,length=1000)
+filter_fc <- seq(1.003,4,length=1000)
+filter <- lapply(index,function(x) {
+   if(x=="pval")
+      y <- sample(filter_p,niter,replace=TRUE)
+   else
+      y <- sample(filter_fc,niter,replace=TRUE)
+      y})
+filter <- do.call("cbind",filter)
+
+
+for(i in seq(niter))
+{
+   l <- 0
+   for(j in seq(dim(filter)[2]))
+   {
+      jump <- sample(0:dim(filter)[2],1)
+      if(jump==0&l<=2)
+      {
+         filter[i,j] <- -1000
+         l <- l+1
+      }
+      else if(l>2)
+         break
+   }
+}
+
+idx <- list()
+for(i in seq(niter))
+{
+   fi <- filter[i,]
+   y=x[,mapply(function(x,y) x>y,x=.SD,y=fi)]
+   idx[[i]] <- which(rowSums(y)==dim(y)[2])
+   cat("i:", i,"\n")
+}
+names(idx) <- seq(niter)
+keep <- which(sapply(idx,length)>0)
+idx <- idx[keep]
+idx <- idx[!duplicated(lapply(idx,sort))]
+score <- sapply(idx,function(x) 
+   {y <-hit[x,]
+   y[,log(sum(hits))/log(2)]+y[,sum(power)]+y[,sum(go)]})
+
+
+id <- names(which(score==max(score)))
+keep <- idx[[id]]
+h1 <- hit[keep,]
+h1 <- h1[go==1,]
+h1 <- h1[order(hits,decreasing=TRUE),]
+```
+
+差异基因中选取其中的重要通路基因如下:
+
+```r
+> h1
+       gene hits power go
+ 1:   NCOA3   36     0  1
+ 2:     DAP   19     0  1
+ 3:    KAT5   19     0  1
+ 4:   PIAS1   18     0  1
+ 5:   HBEGF   17     0  1
+ 6:    XBP1   13     0  1
+ 7:   KDM3A   12     0  1
+ 8:   PDGFA    7     0  1
+ 9:     VCP    7     0  1
+10:   ATG4B    6     0  1
+11: SH3GLB1    4     0  1
+12:  TOLLIP    3     0  1
+13:   RAB1A    2     0  1
+14:   RAB1B    2     0  1
+15:    MANF    1     0  1
+16:   CDK13    1     0  1
+17:    CLTC    1     0  1
+18:    VMP1    1     0  1
+19:   WIPI1    1     0  1
+20:    NADK    0     0  1
+21:   PANK4    0     0  1
+22:   DRAM2    0     0  1
+23:   SGMS2    0     0  1
+24:   SGMS1    0     0  1
+25:   VPS51    0     0  1
+26:   RAB8A    0     0  1
+```
