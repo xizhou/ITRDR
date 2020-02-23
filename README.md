@@ -21,6 +21,7 @@ source("~/ITRDR/R/ITRDR.R")
 ```
 
 ## Usage
+sample_data完整处理案例展示如下：
 ### <a name="process"></a> Process data
 The input data should be formated as following: 
 
