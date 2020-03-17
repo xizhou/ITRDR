@@ -3,6 +3,7 @@ Integrating GEO Transcriptone Big Data in Random-combining to Identify Different
 Integrating GEO transcriptome big data in random-combining to identify differentiated genes in R (ITRDR) is an algorithm based on randomly selecting fold change or p value
 judged by co-occurrence text mining and known markers in filtering differentiated genes in R. 
 The differentiated genes identified by ITRDR are in high probability of important biological meaning. 
+
 ITRDR是Ｒ平台下的基于不同来源的转录组大数据的整合工具，适用于ncbi geo等转录组大数据的整合及其差异基因筛选和特定通路基因筛选等工作，
 筛选到的基因可直接用于实验验证准确率较高。
 
